@@ -6,7 +6,7 @@ from .database import engine, Base  # Импортируем engine и Base дл
 Base.metadata.create_all(bind=engine)
 
 # Создаем экземпляр FastAPI
-app = FastAPI()
+app = FastAPI(docs_url='/')
 
 # Подключаем роутер для работы с билетами и бронированием
 app.include_router(tickets.router, prefix="/api")
