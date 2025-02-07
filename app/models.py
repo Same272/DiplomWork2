@@ -22,6 +22,7 @@ class Ticket(Base):
     price = Column(Float)
     available_seats = Column(Integer)
     is_vip = Column(Boolean, default=False)
+    category = Column(String)  # Добавляем категорию билета
 
     bookings = relationship("Booking", back_populates="ticket")
 
@@ -32,7 +33,8 @@ class Booking(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     ticket_id = Column(Integer, ForeignKey("tickets.id"))
-    num_passengers = Column(Integer)
+    num_passengers = Column(Integer)  # Количество людей
+    seat_type = Column(String)  # Тип места (VIP или обычный)
 
     user = relationship("User", back_populates="bookings")
     ticket = relationship("Ticket", back_populates="bookings")

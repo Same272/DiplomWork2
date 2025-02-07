@@ -1,5 +1,3 @@
-from typing import List
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -7,6 +5,7 @@ from datetime import timedelta
 from .. import schemas, crud, database
 from ..models import User
 from ..security import create_access_token, verify_token, oauth2_scheme
+from typing import List
 
 router = APIRouter()
 
@@ -42,18 +41,12 @@ def read_users_me(current_user: User = Depends(verify_token)):
 def create_ticket(ticket: schemas.TicketCreate, db: Session = Depends(database.get_db)):
     return crud.create_ticket(db, ticket)
 
-# Эндпоинт для получения списка билетов
+# Эндпоинт для получения списка билетов с фильтрацией
 @router.get("/tickets/", response_model=List[schemas.Ticket])
-def read_tickets(skip: int = 0, limit: int = 100, db: Session = Depends(database.get_db)):
-    tickets = crud.get_tickets(db, skip=skip, limit=limit)
-    return tickets
+def read_tickets(category: str = None, is_vip: bool = None, skip: int = 0, limit: int = 100, db: Session = Depends(database.get_db)):
+    return crud.get_tickets(db, category=category, is_vip=is_vip, skip=skip, limit=limit)
 
 # Эндпоинт для бронирования билета
 @router.post("/book/", response_model=schemas.Booking)
 def book_ticket(booking: schemas.BookingCreate, db: Session = Depends(database.get_db), current_user: User = Depends(verify_token)):
-    ticket = crud.get_ticket(db, booking.ticket_id)
-    if not ticket:
-        raise HTTPException(status_code=404, detail="Ticket not found")
-    if ticket.available_seats < booking.num_passengers:
-        raise HTTPException(status_code=400, detail="Not enough available seats")
     return crud.create_booking(db, booking, current_user.id)

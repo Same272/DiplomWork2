@@ -26,6 +26,7 @@ class TicketBase(BaseModel):
     price: float
     available_seats: int
     is_vip: bool
+    category: str  # Категория билета
 
 class TicketCreate(TicketBase):
     pass
@@ -40,6 +41,7 @@ class Ticket(TicketBase):
 class BookingBase(BaseModel):
     ticket_id: int
     num_passengers: int
+    seat_type: str  # Тип места (VIP или обычный)
 
 class BookingCreate(BookingBase):
     pass
