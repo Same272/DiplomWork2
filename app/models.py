@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Float
 from sqlalchemy.orm import relationship
 from .database import Base
 
+# Модель пользователя
 class User(Base):
     __tablename__ = "users"
 
@@ -11,6 +12,7 @@ class User(Base):
 
     bookings = relationship("Booking", back_populates="user")
 
+# Модель билета
 class Ticket(Base):
     __tablename__ = "tickets"
 
@@ -23,6 +25,7 @@ class Ticket(Base):
 
     bookings = relationship("Booking", back_populates="ticket")
 
+# Модель бронирования
 class Booking(Base):
     __tablename__ = "bookings"
 

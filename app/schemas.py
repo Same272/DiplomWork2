@@ -1,5 +1,7 @@
 from pydantic import BaseModel
+from typing import Optional, List
 
+# Схема для регистрации пользователя
 class UserBase(BaseModel):
     username: str
 
@@ -12,10 +14,12 @@ class User(UserBase):
     class Config:
         orm_mode = True
 
+# Схема для токена
 class Token(BaseModel):
     access_token: str
     token_type: str
 
+# Схема для билета
 class TicketBase(BaseModel):
     title: str
     description: str
@@ -32,6 +36,7 @@ class Ticket(TicketBase):
     class Config:
         orm_mode = True
 
+# Схема для бронирования
 class BookingBase(BaseModel):
     ticket_id: int
     num_passengers: int

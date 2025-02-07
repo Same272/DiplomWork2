@@ -1,17 +1,12 @@
 from fastapi import FastAPI
-from .routers import tickets  # Импортируем роутер
-from .database import engine, Base  # Импортируем engine и Base для создания таблиц в базе данных
+from .routers import tickets
+from .database import engine, Base
 
-# Создаем все таблицы в базе данных, если они еще не созданы
+# Создаем таблицы в базе данных
 Base.metadata.create_all(bind=engine)
 
 # Создаем экземпляр FastAPI
-app = FastAPI(docs_url='/')
+app = FastAPI()
 
-# Подключаем роутер для работы с билетами и бронированием
+# Подключаем роутер
 app.include_router(tickets.router, prefix="/api")
-
-# Опционально: Добавляем описание и метаданные для документации API
-app.title = "Ticket Sale API"
-app.description = "API для продажи билетов с регистрацией, авторизацией и бронированием."
-app.version = "1.0.0"
